@@ -1,0 +1,26 @@
+#include <cppunit/extensions/TestFactoryRegistry.h>
+#include <cppunit/ui/text/TestRunner.h>
+#include <cppunit/TestFixture.h>
+#include <cppunit/TestAssert.h>
+#include <cppunit/extensions/HelperMacros.h>
+
+class Test : public CppUnit::TestFixture {
+public:
+  void setUp(){}
+  void tearDown(){}
+
+  void test(){}
+
+  CPPUNIT_TEST_SUITE( Test );
+  CPPUNIT_TEST( test );
+  CPPUNIT_TEST_SUITE_END();
+};
+
+CPPUNIT_TEST_SUITE_REGISTRATION( Test );
+
+int main(){
+  CppUnit::TextUi::TestRunner runner;
+  CppUnit::TestFactoryRegistry &registry = CppUnit::TestFactoryRegistry::getRegistry();
+  runner.addTest( registry.makeTest() );
+  runner.run();
+}
