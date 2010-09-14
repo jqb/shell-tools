@@ -6,7 +6,7 @@ PATH=$TOOLS/bin:$PATH
 
 
 # ENVIRONMENT #################################################
-export LIBS='/home/kuba/Dokumenty/library'
+# export LIBS='/home/kuba/Dokumenty/library'
 
 # java
 export JAVA_HOME=/usr/lib/jvm/java-6-sun
