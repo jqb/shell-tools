@@ -15,6 +15,11 @@ function g {
     cd $(eval $(echo echo $(echo \$DIR_$1)))
 }
 
+function p {
+    source ~/.sdirs
+    echo $(eval $(echo echo $(echo \$DIR_$1)))
+}
+
 function _l {
     source ~/.sdirs
     env | grep "^DIR_" | cut -c5- | grep "^.*=" | cut -f1 -d "="
@@ -31,3 +36,4 @@ function _gcomp {
 
 # bind completion command for g to _gcomp
 complete -F _gcomp g
+complete -F _gcomp p

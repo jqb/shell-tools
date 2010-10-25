@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 # FUNCTIONS ###################################################
 function oldpwd(){
     cs $OLDPWD
