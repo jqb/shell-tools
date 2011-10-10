@@ -68,7 +68,7 @@ function java-print-build-file(){
     echo -e ""
     echo -e ""
     echo -e "function clean(){"
-    echo -e "     rm -rf \$BUILD_DIR Manifest \$BUILD_DIR_TESTS" 
+    echo -e "     rm -rf \$BUILD_DIR Manifest \$BUILD_DIR_TESTS"
     echo -e "}"
     echo -e ""
     echo -e ""
@@ -115,12 +115,12 @@ function java-create-simple-project(){
     projectName=$1
     buildFile=build.sh
     mkdir $projectName && cd $projectName && touch $projectName.java $buildFile
-    echo -e "javac $projectName.java \njava $projectName" > $buildFile
-    echo -e ""                                           >  $projectName.java
-    echo -e "public class $projectName {"                >> $projectName.java
-    echo -e "\tpublic static void main(String... argv){" >> $projectName.java
-    echo -e "\t}"                                        >> $projectName.java
-    echo -e "}"                                          >> $projectName.java
+    echo -e "javac $projectName.java\njava $projectName"   >  $buildFile
+    echo -e ""                                             >  $projectName.java
+    echo -e "public class $projectName {"                  >> $projectName.java
+    echo -e "    public static void main(String... argv){" >> $projectName.java
+    echo -e "    }"                                        >> $projectName.java
+    echo -e "}"                                            >> $projectName.java
     chmod +x $buildFile
     rtmp
     emacs $projectName.java
@@ -158,7 +158,7 @@ function java-create-class(){
 
 function java-etags(){
     dir=.
-    if [ ! -z "$1" ]; then 
+    if [ ! -z "$1" ]; then
 	dir=$1
     fi
     etags --language java `find $dir -name *.java`
@@ -204,20 +204,20 @@ function java-clean-project(){
 function merge-jars(){
     dist_name=$1
     class_path=$2
-    mkdir $dist_name 
+    mkdir $dist_name
 
     for jar_file in $(echo $class_path | tr ':' ' '); do
         cp $jar_file $dist_name
 
         cd $dist_name
         unzip -o -q $jar_file
-        
+
         if [ -e META-INF ]; then
             rm -rf META-INF
         fi
-        
+
         rm `find . -name '*.jar'`
-        cd ..        
+        cd ..
     done
     # rm -rf $dist_name
 }

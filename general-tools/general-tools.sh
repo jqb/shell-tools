@@ -45,4 +45,10 @@ function unpack(){
 function timer(){
     java -jar $TOOLS/general-tools/timer.jar $@
 }
+
+function translate() {
+    echo "[`wget -qO- --user-agent firefox \"https://www.googleapis.com/language/translate/v2?key=YOUR KEY&q=$3&source=$1&target=$2\"`]" \
+	| jsawk -a "return this[0].data.translations[0].translatedText" \
+	| perl -MHTML::Entities -pe 'decode_entities($_)'
+}
 ###############################################################

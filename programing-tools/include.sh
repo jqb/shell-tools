@@ -6,6 +6,7 @@
 . $TOOLS/programing-tools/python-tools.sh
 . $TOOLS/programing-tools/programing-tools.sh
 . $TOOLS/programing-tools/django_bash_completion
+# . $TOOLS/programing-tools/rails_bash_completion
 # . $TOOLS/programing-tools/grails_bash_completion
 
 

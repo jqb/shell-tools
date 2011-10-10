@@ -1,16 +1,16 @@
 #!/bin/bash
 
 
-function python-django-set-settings-module() { 
+function python-django-set-settings-module() {
     # add the current directory and the parent directory to PYTHONPATH
     # sets DJANGO_SETTINGS_MODULE
     export PYTHONPATH=$PYTHONPATH:$PWD/..
     export PYTHONPATH=$PYTHONPATH:$PWD
-    if [ -z "$1" ]; then 
-        x=${PWD/\/[^\/]*\/}               
+    if [ -z "$1" ]; then
+        x=${PWD/\/[^\/]*\/}
         export DJANGO_SETTINGS_MODULE=$x.settings
-    else    
-        export DJANGO_SETTINGS_MODULE=$1 
+    else
+        export DJANGO_SETTINGS_MODULE=$1
     fi
 
     echo "DJANGO_SETTINGS_MODULE set to $DJANGO_SETTINGS_MODULE"
@@ -40,6 +40,16 @@ function python-create-simple-project(){
 function python-django-modelviz-graph(){
     file=model_graph.png
     python $TOOLS/programing-tools/modelviz.py $@ | dot -Tpng -o $file && eog $file
+}
+
+function python-django-modelviz-pl-graph(){
+    file=model_graph.png
+    python $TOOLS/programing-tools/modelvizPL.py $@ | dot -Tpng -o $file && eog $file
+}
+
+function python-django-modelviz-graph-pdf(){
+    file=model_graph.pdf
+    python $TOOLS/programing-tools/modelviz.py $@ | dot -Tpdf -o $file && evince $file
 }
 
 function pycrm(){

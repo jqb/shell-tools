@@ -4,7 +4,7 @@
 export TOOLS=$HOME/Dokumenty/tools
 PATH=$TOOLS/bin:$PATH
 
-
+export EMAIL=kuba.janoszek@gmail.com
 # ENVIRONMENT #################################################
 # export LIBS='/home/kuba/Dokumenty/library'
 
@@ -12,7 +12,7 @@ PATH=$TOOLS/bin:$PATH
 export JAVA_HOME=/usr/lib/jvm/java-6-sun
 export JVM=$JAVA_HOME/bin
 # export JBOSS_HOME=~/Dokumenty/library/java/jboss-5.1.0.GA
-PATH=$JVM:$PATH
+export PATH=$JVM:$PATH
 
 
 # grails & groovy
@@ -35,16 +35,26 @@ PATH=$JVM:$PATH
 
 
 # boost
-# export BOOST_ROOT='/usr/local/boost_1_38_0'
+# export BOOST_ROOT=/usr/local/boost_1_47_0
 
 # cpp unit
 # export CPP_UNIT_LIB=/usr/lib/libcppunit.a
+
+# sublime text editor
+export PATH=$HOME/Programy/sublime/:$PATH
+
+# node.js
+export PATH=$HOME/Programy/node/bin:$PATH
+
+# ruby's RVM
+[[ -s "~/.rvm/scripts/rvm" ]] && source "~/.rvm/scripts/rvm"
+export PATH=$HOME/.rvm/bin:$PATH
 ###############################################################
 
 
 function __include_all(){
     for dir in $(echo $1 | tr ':' ' '); do
-	for include_file in $(find $dir -name 'include.sh'); do 
+	for include_file in $(find $dir -name 'include.sh'); do
 	    # echo "Including subpackage: $include_file"
 	    source $include_file
 	done

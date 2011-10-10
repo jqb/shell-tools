@@ -1,3 +1,5 @@
-# ignore only 'external' directory which has 
+# ignore only 'external' directory which has
 # tools with big or confidential tools
+# and 'bin' where executables are
 externals/
+bin/

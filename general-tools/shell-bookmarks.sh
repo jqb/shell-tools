@@ -34,6 +34,12 @@ function _gcomp {
     return 0
 }
 
-# bind completion command for g to _gcomp
+function project {
+    source ~/.sdirs
+    emacs-snapshot $(eval $(echo echo $(echo \$DIR_$1))) &
+}
+
+
+complete -F _gcomp open-project
 complete -F _gcomp g
 complete -F _gcomp p

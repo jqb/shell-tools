@@ -13,7 +13,7 @@ function cpp-print-simple-build-file(){
 
 function cpp-etags(){
     dir=.
-    if [ ! -z "$1" ]; then 
+    if [ ! -z "$1" ]; then
 	dir=$1
     fi
     etags --language c++ `find $dir -name '*.cpp' -or -name '*.hpp' -or -name '*.h'`
@@ -31,7 +31,7 @@ function cpp-create-simple-project(){
     projectName=$1
     buildFile=build
     mkdir $projectName && cd $projectName && touch $projectName.cpp $buildFile
-    
+
     cpp-print-simple-build-file $projectName > $buildFile
     cat $TOOLS/templates/cpp-main-template > $projectName.cpp
     chmod +x $buildFile
