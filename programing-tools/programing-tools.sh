@@ -20,3 +20,10 @@ function create-simple-bash-project(){
     emacs $projectName.sh
 }
 # END OF BASH ######################################
+
+
+# CLOJURE ##########################################
+function clojure() {
+    java -cp $TOOLS/programing-tools/clojure-1.3.0.jar clojure.main $@
+}
+# END OF CLOJURE ###################################
