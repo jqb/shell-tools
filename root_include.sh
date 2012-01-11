@@ -1,17 +1,18 @@
 #!/bin/bash
 
 
-export TOOLS=$HOME/Dokumenty/tools
+export TOOLS=$HOME/tools
 PATH=$TOOLS/bin:$PATH
+PATH=$HOME/bin:$PATH
 
 export EMAIL=kuba.janoszek@gmail.com
 # ENVIRONMENT #################################################
-# export LIBS='/home/kuba/Dokumenty/library'
+# export LIBS='/home/kuba/docs/library'
 
 # java
 export JAVA_HOME=/usr/lib/jvm/java-6-sun
 export JVM=$JAVA_HOME/bin
-# export JBOSS_HOME=~/Dokumenty/library/java/jboss-5.1.0.GA
+# export JBOSS_HOME=~/docs/library/java/jboss-5.1.0.GA
 export PATH=$JVM:$PATH
 
 
@@ -41,14 +42,14 @@ export PATH=$JVM:$PATH
 # export CPP_UNIT_LIB=/usr/lib/libcppunit.a
 
 # sublime text editor
-export PATH=$HOME/Programy/sublime/:$PATH
+# export PATH=$HOME/Programy/sublime/:$PATH
 
 # node.js
-export PATH=$HOME/Programy/node/bin:$PATH
+# export PATH=$HOME/Programy/node/bin:$PATH
 
 # ruby's RVM
-[[ -s "~/.rvm/scripts/rvm" ]] && source "~/.rvm/scripts/rvm"
-export PATH=$HOME/.rvm/bin:$PATH
+# [[ -s "~/.rvm/scripts/rvm" ]] && source "~/.rvm/scripts/rvm"
+# export PATH=$HOME/.rvm/bin:$PATH
 ###############################################################
 
 
@@ -66,5 +67,5 @@ __include_all $TOOLS
 
 
 function reload-all(){
-    source $HOME/Dokumenty/tools/root_include.sh
+    source $HOME/tools/root_include.sh
 }

@@ -1,0 +1,3 @@
+[submodule "my.emacs.d"]
+	path = my.emacs.d
+	url = https://jqb@github.com/jqb/.emacs.d.git

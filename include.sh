@@ -2,13 +2,13 @@
 
 
 # DEFAULT EDITOR:
-export EDITOR="emacs"
+export EDITOR="emacs -nw"
 
 
 # ALIASES #####################################################
 alias xselb='xsel -b'
 ###############################################################
-# PS1="\u@\h \W$ "
+PS1="\u@\h \W$ "
 
 
 function set-uj-ip(){

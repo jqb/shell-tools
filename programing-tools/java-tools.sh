@@ -23,7 +23,7 @@ function java-print-build-file(){
     echo -e ""
     echo -e ""
     echo -e "# CLASS PATH ##############################"
-    echo -e "export LIBS=~/Dokumenty/library"
+    echo -e "export LIBS=~/docs/library"
     echo -e "export CLASSPATH=\$CLASSPATH"
     echo -e "CLASSPATH=\$LIBS/java/junit-4.5.jar:\$CLASSPATH"
     echo -e "CLASSPATH=\$LIBS/java/commons-logging-1.0.4.jar:\$CLASSPATH"

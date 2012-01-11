@@ -3,17 +3,7 @@
 
 # FUNCTIONS ###################################################
 function oldpwd(){
-    cs $OLDPWD
-}
-
-function rtmp(){
-    if [ "$1" == "-r" ]; then
-	rm `find . -name '*~'` 2> /dev/null
-	rm `find . -name '.*~'` 2> /dev/null
-	return 0
-    fi
-    rm *~ 2> /dev/null
-    rm .*~ 2> /dev/null
+    cd $OLDPWD && ls
 }
 
 function rmf(){
@@ -46,9 +36,7 @@ function timer(){
     java -jar $TOOLS/general-tools/timer.jar $@
 }
 
-function translate() {
-    echo "[`wget -qO- --user-agent firefox \"https://www.googleapis.com/language/translate/v2?key=YOUR KEY&q=$3&source=$1&target=$2\"`]" \
-	| jsawk -a "return this[0].data.translations[0].translatedText" \
-	| perl -MHTML::Entities -pe 'decode_entities($_)'
+function git-log-graph () {
+    git log --graph --pretty="format:%C(yellow)%h%Cblue%d%Creset %s %C(white) %an, %ar%Creset"
 }
 ###############################################################

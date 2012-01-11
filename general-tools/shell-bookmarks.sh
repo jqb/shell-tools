@@ -34,12 +34,12 @@ function _gcomp {
     return 0
 }
 
-function project {
+function gworkon {
     source ~/.sdirs
-    emacs-snapshot $(eval $(echo echo $(echo \$DIR_$1))) &
+    cd $(eval $(echo echo $(echo \$DIR_$1))) && workon $1
 }
 
 
-complete -F _gcomp open-project
 complete -F _gcomp g
 complete -F _gcomp p
+complete -F _gcomp gworkon

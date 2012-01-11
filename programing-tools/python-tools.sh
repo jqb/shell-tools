@@ -51,7 +51,3 @@ function python-django-modelviz-graph-pdf(){
     file=model_graph.pdf
     python $TOOLS/programing-tools/modelviz.py $@ | dot -Tpdf -o $file && evince $file
 }
-
-function pycrm(){
-    rm $(find -name '*.pyc')
-}
