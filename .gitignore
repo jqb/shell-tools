@@ -3,3 +3,4 @@
 # and 'bin' where executables are
 externals/
 my.emacs.d/
+*~
