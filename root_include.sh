@@ -16,6 +16,12 @@ export JVM=$JAVA_HOME/bin
 export PATH=$JVM:$PATH
 
 
+# Tomcat - catalina
+export CATALINA_BASE=/home/kuba/libs/apache/apache-tomcat-6.0.35
+export CATALINA_HOME=/home/kuba/libs/apache/apache-tomcat-6.0.35
+export CATALINA_TMPDIR=/home/kuba/libs/apache/apache-tomcat-6.0.35/temp
+export CLASSPATH=$CLASSPATH:$(ls $CATALINA_HOME/lib/*.jar | tr '\n' ':')
+
 # grails & groovy
 # export GRAILS_HOME=~/.grails
 # PATH=$GRAILS_HOME/bin:$PATH
@@ -46,10 +52,6 @@ export PATH=$JVM:$PATH
 
 # node.js
 # export PATH=$HOME/Programy/node/bin:$PATH
-
-# ruby's RVM
-# [[ -s "~/.rvm/scripts/rvm" ]] && source "~/.rvm/scripts/rvm"
-# export PATH=$HOME/.rvm/bin:$PATH
 ###############################################################
 
 
