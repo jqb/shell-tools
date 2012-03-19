@@ -1,0 +1,8 @@
+#!/bin/bash
+
+
+if [ "$1" == "-r" ]; then
+    rm `find . -name '*.pyc'` 2> /dev/null
+else
+    rm *.pyc 2> /dev/null
+fi

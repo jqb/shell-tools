@@ -2,5 +2,4 @@
 # tools with big or confidential tools
 # and 'bin' where executables are
 externals/
-bin/
 my.emacs.d/

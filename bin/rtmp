@@ -1,0 +1,10 @@
+#!/bin/bash
+
+
+if [ "$1" == "-r" ]; then
+    rm `find . -name '*~'` 2> /dev/null
+    rm `find . -name '.*~'` 2> /dev/null
+else
+    rm *~ 2> /dev/null
+    rm .*~ 2> /dev/null
+fi
