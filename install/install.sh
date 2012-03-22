@@ -1,10 +1,14 @@
 # This script all commonly used packages and scripts
 
+. common.sh
+# install_my_tools_scripts
+# install_git_config
+# install_my_command_line_tools
+
 
 function install_git() {
     echo "Installing git..." && \
-	sudo apt-get -y install git && \
-	cp gitconfig.in $HOME/.gitconfig
+	sudo apt-get -y install git
 }
 
 function install_right_side_window_buttons() {
@@ -38,19 +42,14 @@ function install_sun_java() {
 	sudo apt-get -y install sun-java6-jre sun-java6-jdk sun-java6-plugin sun-java6-fonts
 }
 
-function install_command_line_tools() {
-    echo "Installing command line tools..." && \
-	mkdir -p $HOME/bin && \
-	for executable in $(ls ../bin); do ln -s $PWD/bin/$executable $HOME/bin/$executable; done
-}
-
 
 echo "Installer..." && \
     install_git && \
+    install_git_config && \
     install_right_side_window_buttons && \
     install_emacs && \
     install_python_tools && \
     install_tools && \
     install_sun_java && \
-    install_command_line_tools && \
+    install_my_command_line_tools && \
     echo "...done"
