@@ -37,6 +37,9 @@
 
 # node.js
 # export PATH=$HOME/Programy/node/bin:$PATH
+
+# google appengine
+export PATH=$HOME/docs/libs/google_appengine:$PATH
 ###############################################################
 
 
