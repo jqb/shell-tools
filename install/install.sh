@@ -23,7 +23,8 @@ function install_tools() {
     echo "Installing tools..." && \
 	sudo apt-get -y install ack-grep && \
 	sudo ln -s /usr/bin/ack-grep /usr/bin/ack && \
-	sudo apt-get -y install xsel
+	sudo apt-get -y install xsel && \
+	sudo apt-get -y install p7zip-full
 }
 
 function install_python_tools() {
