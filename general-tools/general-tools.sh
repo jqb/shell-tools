@@ -1,6 +1,3 @@
-#!/bin/bash
-
-
 # FUNCTIONS ###################################################
 function oldpwd(){
     cd $OLDPWD && ls
@@ -37,6 +34,6 @@ function timer(){
 }
 
 function git-log-graph () {
-    git log --graph --pretty="format:%C(yellow)%h%Cblue%d%Creset %s %C(white) %an, %ar%Creset"
+    git log --graph --pretty="format:%C(yellow)%h%Cblue%d%Creset %s %C(white) %an, %ar%Creset" $@
 }
 ###############################################################

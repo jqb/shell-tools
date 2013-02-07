@@ -1,6 +1,3 @@
-#!/bin/bash
-
-
 # GENERAL ##############################
 export TOOLS=$HOME/tools
 export EMAIL=kuba.janoszek@gmail.com

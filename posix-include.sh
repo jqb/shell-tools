@@ -1,6 +1,3 @@
-#!/bin/bash
-
-
 # ENVIRONMENT #################################################
 # export LIBS='/home/kuba/docs/library'
 
@@ -46,16 +43,4 @@ export PATH=$HOME/docs/libs/google_appengine:$PATH
 
 # ALIASES #####################################################
 alias xselb='xsel -b'
-###############################################################
-
-
-
-# FUNCTIONS ###################################################
-function set-uj-ip(){
-    sudo ifconfig eth0 hw ether 00:60:08:BB:1F:9F
-}
-
-function set-bydgoska-ip(){
-    sudo ifconfig eth0 hw ether 00:1A:80:BB:5C:84
-}
 ###############################################################
