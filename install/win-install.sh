@@ -1,3 +1,4 @@
+#!/bin/bash
 . common.sh
 # install_my_tools_scripts
 # install_git_config

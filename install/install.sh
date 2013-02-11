@@ -1,3 +1,4 @@
+#!/bin/bash
 # This script all commonly used packages and scripts
 
 . common.sh
