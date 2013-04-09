@@ -1,6 +1,3 @@
-#!/bin/bash
-
-
 function python-django-set-settings-module() {
     # add the current directory and the parent directory to PYTHONPATH
     # sets DJANGO_SETTINGS_MODULE

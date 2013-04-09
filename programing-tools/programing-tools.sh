@@ -1,7 +1,3 @@
-#!/bin/bash
-
-
-
 # SVN ###############################################
 function svn-add-all(){
     svn add `svn st | grep ? | awk '{ print $2 }'`

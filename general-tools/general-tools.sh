@@ -1,6 +1,3 @@
-#!/bin/bash
-
-
 # FUNCTIONS ###################################################
 function oldpwd(){
     cd $OLDPWD && ls

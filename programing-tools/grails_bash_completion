@@ -1,5 +1,3 @@
-#!/bin/bash
-
 export GRAILS_VERSION="$(ls -lhr $HOME/.grails | egrep -i '1\.' | head -1 | gawk '{print $9 }')"
 
 sed_option="-E"

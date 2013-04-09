@@ -1,3 +1,4 @@
+#!/bin/bash
 # HOME variable MUST be setup
 
 function install_my_tools_scripts() {

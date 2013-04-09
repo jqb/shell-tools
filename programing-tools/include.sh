@@ -1,4 +1,4 @@
-#!/bin/bash
+# Common things for systems
 
 . $TOOLS/programing-tools/programing-tools.sh
 . $TOOLS/programing-tools/django_bash_completion
@@ -10,7 +10,18 @@
 # . $TOOLS/programing-tools/grails_bash_completion
 
 
-# bash completion for pip
-eval "`pip completion --bash`"
+# git terminal branch coloring
+function parse_git_branch () {
+   git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
 
-. $TOOLS/programing-tools/autoenv.sh
+function set_git_sensitive_prompt() {
+   RED="\[\033[0;31m\]"
+   YELLOW="\[\033[0;33m\]"
+   GREEN="\[\033[0;32m\]"
+   NO_COLOUR="\[\033[0m\]"
+   PS1="$GREEN\u@machine$NO_COLOUR:\w$YELLOW\$(parse_git_branch)$NO_COLOUR\$ "
+}
+
+set_git_sensitive_prompt
+

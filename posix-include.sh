@@ -1,6 +1,3 @@
-#!/bin/bash
-
-
 # ENVIRONMENT #################################################
 # export LIBS='/home/kuba/docs/library'
 
@@ -49,16 +46,4 @@ source $HOME/.rvm/scripts/rvm
 
 # ALIASES #####################################################
 alias xselb='xsel -b'
-###############################################################
-
-
-
-# FUNCTIONS ###################################################
-function set-uj-ip(){
-    sudo ifconfig eth0 hw ether 00:60:08:BB:1F:9F
-}
-
-function set-bydgoska-ip(){
-    sudo ifconfig eth0 hw ether 00:1A:80:BB:5C:84
-}
 ###############################################################
