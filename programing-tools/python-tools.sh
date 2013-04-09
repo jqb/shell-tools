@@ -42,11 +42,6 @@ function python-django-modelviz-graph(){
     python $TOOLS/programing-tools/modelviz.py $@ | dot -Tpng -o $file && eog $file
 }
 
-function python-django-modelviz-pl-graph(){
-    file=model_graph.png
-    python $TOOLS/programing-tools/modelvizPL.py $@ | dot -Tpng -o $file && eog $file
-}
-
 function python-django-modelviz-graph-pdf(){
     file=model_graph.pdf
     python $TOOLS/programing-tools/modelviz.py $@ | dot -Tpdf -o $file && evince $file

@@ -40,6 +40,9 @@
 
 # google appengine
 export PATH=$HOME/docs/libs/google_appengine:$PATH
+
+# RVM
+source $HOME/.rvm/scripts/rvm
 ###############################################################
 
 
