@@ -16,7 +16,13 @@
 # export GOOS=linux
 # export GOARCH=386
 # export GOBIN=$HOME/.go/bin
-# PATH=$GOBIN:$PATH
+# export PATH=$GOBIN:$PATH
+# export GOWORKSPACE=$HOME/docs/projects/go/workspace
+# export GOPATH=$GOWORKSPACE  # main package repo
+# export PATH=$GOPATH/bin:$PATH
+# according to GOBIN read this:
+# http://stackoverflow.com/questions/17667803/go-install-always-uses-goroot-bin-instead-of-gopath
+
 
 # maven
 # export MVN2_HOME='/usr/local/apache-maven/apache-maven-2.0.9'
@@ -36,10 +42,10 @@
 # export PATH=$HOME/Programy/node/bin:$PATH
 
 # google appengine
-export PATH=$HOME/docs/libs/google_appengine:$PATH
+# export PATH=$HOME/docs/libs/google_appengine:$PATH
 
 # RVM
-source $HOME/.rvm/scripts/rvm
+# source $HOME/.rvm/scripts/rvm
 ###############################################################
 
 
