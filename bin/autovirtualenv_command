@@ -1,0 +1,102 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import os
+import sys
+
+
+abspath = os.path.abspath
+pjoin = os.path.join
+dirname = os.path.dirname
+isdir = os.path.isdir
+exists = os.path.exists
+
+
+def calculatepath(place, *path):
+    absolute_here = abspath(place)  # always in the place where it was cold
+    return abspath(pjoin(absolute_here, *path))
+
+
+def concat_commands(*cmds):
+    return ' && '.join([c for c in cmds if c])
+
+
+def set_var(name, value):
+    return 'export %s=%s' % (name, value)
+
+
+def unset_var(name):
+    return 'unset %s' % name
+
+
+def autovirtualenv_command(place):
+    here = lambda *path: calculatepath(place, *path)
+
+    default_file = here('.venv', 'default')
+    default_env = here('.venv', 'env')
+
+    default_db = here('.venv', 'db', 'default')
+    if exists(default_db):
+        default_db_config_name = open(default_db, "r").read().replace("\n", "")
+        default_db_config = here('.venv', 'db', default_db_config_name)
+        mysql_config_file = set_var("MYSQL_CONFIG_FILE", default_db_config)
+    else:
+        mysql_config_file = unset_var("MYSQL_CONFIG_FILE")
+
+    on_activate = here('.venv', 'on_activate')
+    on_deactivate = here('.venv', 'on_deactivate')
+    on_activate = "source %s" % on_activate if exists(on_activate) else None
+    on_deactivate = "source %s" % on_deactivate if exists(on_deactivate) else None
+
+    if exists(default_file):
+        virtualenv_name = open(default_file, "r").read().replace("\n", "")
+        virtualenv_path = here('.venv', virtualenv_name)
+
+        if isdir(virtualenv_path):
+            return concat_commands(mysql_config_file,
+                "source %s" % pjoin(virtualenv_path, 'bin', 'activate'), on_activate)
+        else:
+            return concat_commands(mysql_config_file,
+                "workon %s" % virtualenv_name, on_activate)
+
+    else:
+
+        if isdir(default_env):
+            return concat_commands(mysql_config_file,
+                "source %s" % pjoin(default_env, 'bin', 'activate'), on_activate)
+        else:
+            return concat_commands("deactivate", mysql_config_file, on_deactivate)
+
+
+def safe_deactivate(func):
+    def wrapper(*args, **kwargs):
+        result = func(*args, **kwargs)
+        if result.startswith("deactivate"):
+            if os.environ.get("VIRTUAL_ENV"):
+                return result
+            else:
+                return ""
+        return result
+    return wrapper
+
+
+@safe_deactivate
+def parent_search(place):
+    if place == "/":
+        return "deactivate"
+
+    command = autovirtualenv_command(place)
+    if command.startswith("deactivate"):
+        return parent_search(abspath(pjoin(place, "..")))
+
+    return command
+
+
+def main(place):
+    place = abspath(place)
+    print(
+        parent_search(place)
+    )
+
+
+if __name__ == '__main__':
+    main(sys.argv[1] if sys.argv[1:] else ".")
