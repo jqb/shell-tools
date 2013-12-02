@@ -1,0 +1,116 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import os
+import sys
+
+
+class Node(object):
+    def __init__(self, left=None, right=None, value=None):
+        self.value = value
+        self.left = left
+        self.right = right
+
+
+def intersection(a_set, other):
+    result = []
+    for i in xrange(len(a_set)):
+        try:
+            other.index(a_set[i])
+        except ValueError:
+            pass
+        else:
+            result.append(a_set[i])
+    return result
+
+
+def make_tree(pre_order, in_order):
+    # print pre_order, in_order
+
+    # postacie pre i in order MUSZA byc tej samej dlugosci
+    if len(pre_order) != len(in_order):
+        return None
+
+    # jesli sa puste, to nie jest to bledem krytycznym,
+    # ale drzewo jest puste
+    if len(pre_order) == 0:
+        return None
+
+    in_root_index = in_order.index(pre_order[0])
+
+    # pomocnicze stringi, dla rekurncyjnych wywolan
+    left_in = in_order[0:in_root_index]
+    right_in = in_order[in_root_index + 1:]
+    left_pre = intersection(pre_order[1:], left_in)
+    right_pre = intersection(pre_order[1:], right_in)
+
+    # print "left_pre(%(left_pre)s), right_pre(%(right_pre)s), " % locals()
+
+    return Node(
+        value=pre_order[0],
+        left=make_tree(left_pre, left_in),
+        right=make_tree(right_pre, right_in))
+
+
+# printing helpers
+def pprint(*args, **kwargs):
+    sys.stdout.write(*args, **kwargs)
+
+
+def pprintln(*args, **kwargs):
+    sys.stdout.write(*args, **kwargs)
+    sys.stdout.write("\n")
+
+
+def gotoxy(x, y):
+    pprint("\033[%d;%dH" % (y, x))
+# end
+
+
+def print_node(node, point_0, x, y):
+    if node == None:
+        return
+
+    gotoxy(point_0 + x, y)
+    pprint(node.value)
+
+    u = abs(int(
+        (point_0 - abs(point_0 - x)) / 2
+    ))
+
+    print_node(node.left, point_0 + x, -u, y + 2)
+    print_node(node.right, point_0 + x, u, y + 2)
+
+
+def split_input_string(input_string):
+    if ',' in input_string:
+        return map(str.strip, input_string.split(','))
+    return list(input_string)
+
+
+def print_tree(pre_order_str, in_order_str):
+    pre_order = split_input_string(pre_order_str)
+    in_order = split_input_string(in_order_str)
+
+    root = make_tree(pre_order, in_order)
+
+    os.system("clear")
+    print_node(root, 0, 50, 5)
+    pprint("\n" * 10)
+
+
+def from_stdin():
+    input_args = sys.stdin.read().strip('\n')
+    print input_args.split(' ')
+    pre_, in_ = filter(
+        lambda x: x,
+        map(str.strip, input_args.split(' '))
+    )
+    print_tree(pre_, in_)
+
+
+if __name__ == '__main__':
+    args = sys.argv[1:]
+    if not args:
+        from_stdin()
+    else:
+        print_tree(args[0], args[1])

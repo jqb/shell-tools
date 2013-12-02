@@ -1,0 +1,55 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import sys
+
+
+DOT = """%(graph_type)s %(graph_name)s {
+%(body)s
+}"""
+
+EDGE_LABELED = '{vs} -> {vt} [label="{label}"];'
+EDGE_NON_LABELED = '{vs} -> {vt};'
+
+
+def edge(vs, vt, label=None):
+    tmpl = EDGE_NON_LABELED if not label else EDGE_LABELED
+    return tmpl.format(**locals())
+
+
+def generate(data, graph_type='digraph', graph_name='G'):
+    body = [
+        '    %s' % edge(vs, vt, value)
+        for vs, vt, value in data
+    ]
+
+    return DOT % dict(
+        graph_name=graph_name,
+        graph_type=graph_type,
+        body='\n'.join(body),
+    )
+
+
+def split_line(line):
+    values = [v.strip('\n') for v in line.split(' ')]
+    while len(values) < 3:
+        values.append(None)
+    return values
+
+
+def read_file(filename):
+    with open(filename, "r") as file:
+        data = [
+            split_line(line)
+            for line in file.xreadlines()
+        ]
+    return data
+
+
+def main(filename):
+    data = read_file(filename)
+    dot_graph = generate(data)
+    return dot_graph
+
+
+if __name__ == '__main__':
+    print(main(sys.argv[1]))
