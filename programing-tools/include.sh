@@ -2,7 +2,7 @@
 
 . $TOOLS/programing-tools/programing-tools.sh
 . $TOOLS/programing-tools/django_bash_completion
-. $TOOLS/programing-tools/rails.bash
+# . $TOOLS/programing-tools/rails.bash
 
 # . $TOOLS/programing-tools/java-tools.sh
 # . $TOOLS/programing-tools/cpp-tools.sh
