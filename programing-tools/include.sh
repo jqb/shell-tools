@@ -4,11 +4,6 @@
 . $TOOLS/programing-tools/django_bash_completion
 # . $TOOLS/programing-tools/rails.bash
 
-# . $TOOLS/programing-tools/java-tools.sh
-# . $TOOLS/programing-tools/cpp-tools.sh
-. $TOOLS/programing-tools/python-tools.sh
-# . $TOOLS/programing-tools/grails_bash_completion
-
 
 # git terminal branch coloring
 function parse_git_branch () {
