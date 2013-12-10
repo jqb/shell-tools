@@ -28,6 +28,10 @@ function set_git_sensitive_prompt() {
    PS1="$GREEN$NO_COLOUR\w$YELLOW\$(parse_git_branch)$NO_COLOUR\$ "
 }
 
+function git-log-graph () {
+    git log --graph --pretty="format:%C(yellow)%h%Cblue%d%Creset %s %C(white) %an, %ar%Creset" $@
+}
+
 set_git_sensitive_prompt
 # END OF GIT ########################################
 
