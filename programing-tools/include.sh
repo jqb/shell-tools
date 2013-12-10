@@ -1,11 +1,21 @@
-# Common things for systems
 
-. $TOOLS/programing-tools/programing-tools.sh
-. $TOOLS/programing-tools/django_bash_completion
-# . $TOOLS/programing-tools/rails.bash
+# SVN ###############################################
+function svn-add-all(){
+    svn add `svn st | grep ? | awk '{ print $2 }'`
+}
+# END OF SVN ########################################
 
 
-# git terminal branch coloring
+
+# CLOJURE ##########################################
+function clojure() {
+    java -cp $TOOLS/programing-tools/clojure-1.3.0.jar clojure.main $@
+}
+# END OF CLOJURE ###################################
+
+
+
+# GIT TERMINAL BRANCH COLORING #####################
 function parse_git_branch () {
    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
 }
@@ -19,25 +29,11 @@ function set_git_sensitive_prompt() {
 }
 
 set_git_sensitive_prompt
+# END OF GIT ########################################
 
 
-# hg sensitive prompt
-# hg_branch() {
-#     hg branch 2> /dev/null | \
-#         awk '{ printf "\033[37;0m on \033[35;40m" $1 }'
-#     hg bookmarks 2> /dev/null | \
-#         awk '/\*/ { printf "\033[37;0m at \033[33;40m" $2 }'
-# }
 
-# function set_hg_sensitive_prompt() {
-#     DEFAULT="[37;40m"
-#     PINK="[35;40m"
-#     GREEN="[32;40m"
-#     ORANGE="[33;40m"
-#     PS1='\w\$(hg_branch)\e${GREEN}\e${DEFAULT}$ '
-# }
-
-
+# OWN TOOLS #########################################
 function cd () {
     builtin cd $@ && eval "$(autovirtualenv_command)"
 }
@@ -52,3 +48,10 @@ function db () {
         mysql $@
     fi
 }
+# END OF OWN TOOLS ##################################
+
+
+
+# ADDITIONAL IMPORTS
+. $TOOLS/programing-tools/django_bash_completion
+# . $TOOLS/programing-tools/rails.bash
