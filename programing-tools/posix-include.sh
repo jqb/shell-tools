@@ -19,8 +19,3 @@ eval "`boil --bash-completion`"
 
 # bash completion for pip
 eval "`pip completion --bash`"
-
-
-# Mac terminal ls colors
-export CLICOLOR=1
-export LSCOLORS=ExFxCxDxBxegedabagacad

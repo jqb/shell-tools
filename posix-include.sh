@@ -47,8 +47,6 @@
 # RVM
 # source $HOME/.rvm/scripts/rvm
 
-# PATH - my tools
-export PATH=/Users/divio/tools/bin:$PATH
 ###############################################################
 
 

@@ -1,26 +1,27 @@
 # GENERAL ##############################
 export TOOLS=$HOME/tools
 export EMAIL=kuba.janoszek@gmail.com
-export PLATFORM_NAME=$(python -c "import os; print '%s' % os.name")
-export SYSTEM_NAME=$(uname | tr '[:upper:]' '[:lower:]')
+export SYSTEM_NAME=$(python -c "import os; print '%s' % os.name")
+export PLATFORM_NAME=$(uname | tr '[:upper:]' '[:lower:]')
 ########################################
 
 
 function __include_all(){
-    SYS=$PLATFORM_NAME
-    SYSNAME=$SYSTEM_NAME
+    INCLUDE_FILE=$2
     for dir in $(echo $1 | tr ':' ' '); do
-	for include_file in $(find $dir -name "$SYSNAME-include.sh" -or -name "include.sh" -or -name "$SYS-include.sh"); do
-	    # echo "Including subpackage: $include_file"
+	for include_file in $(find $dir -name $INCLUDE_FILE); do
 	    source $include_file
 	done
     done
 }
 
+__include_all $TOOLS "$PLATFORM_NAME-before-include.sh"  # (darwin)-before-include.sh
+__include_all $TOOLS "$SYSTEM_NAME-before-include.sh"    # (posix|nt)-include.sh
+__include_all $TOOLS "include.sh"
+__include_all $TOOLS "$SYSTEM_NAME-include.sh"           # (posix|nt)-include.sh
+__include_all $TOOLS "$PLATFORM_NAME-include.sh"         # (darwin)-include.sh
 
-__include_all $TOOLS
 
-
-function reload-all(){
+function reload-all () {
     source $HOME/tools/root_include.sh
 }
