@@ -59,6 +59,12 @@ function db () {
         mysql $@
     fi
 }
+
+function -current-directory-name () {
+    _script="$(stat -f ${BASH_SOURCE[0]})"
+    _base="$(dirname $_script)"
+    echo $_base
+}
 # END OF OWN TOOLS ##################################
 
 
