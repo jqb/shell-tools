@@ -29,8 +29,6 @@ source /usr/local/bin/virtualenvwrapper.sh
 # Will raise an exception
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
-export EDITOR="/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
-alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs"
 
 
 # Mac terminal ls colors
