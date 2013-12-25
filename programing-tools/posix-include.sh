@@ -39,6 +39,10 @@ function git-log-graph () {
     git log --graph --pretty="format:%C(yellow)%h%Cblue%d%Creset %s %C(white) %an, %ar%Creset" $@
 }
 
+function git-log-graph-no-color () {
+    git log --graph --pretty="format:%h%d %s %an, %ar" $@
+}
+
 set_git_sensitive_prompt
 # END OF GIT ########################################
 
