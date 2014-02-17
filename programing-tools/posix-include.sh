@@ -36,7 +36,7 @@ function set_git_sensitive_prompt() {
 }
 
 function git-log-graph () {
-    git log --graph --pretty="format:%C(yellow)%h%Cblue%d%Creset %s %C(white) %an, %ar%Creset" $@
+    git log --graph --pretty="format:%C(yellow)%h%Cblue%d%Creset %s %C(white) %an, %ar(%ai)%Creset" $@
 }
 
 function git-log-graph-no-color () {
@@ -65,7 +65,7 @@ function db () {
 }
 
 function -current-directory-name () {
-    _script="$(stat -f ${BASH_SOURCE[0]})"
+    _script="$(stat -f $1)"
     _base="$(dirname $_script)"
     echo $_base
 }
