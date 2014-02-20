@@ -65,9 +65,7 @@ function db () {
 }
 
 function -current-directory-name () {
-    _script="$(stat -f $1)"
-    _base="$(dirname $_script)"
-    echo $_base
+    dirname $(realpath $1)
 }
 # END OF OWN TOOLS ##################################
 
