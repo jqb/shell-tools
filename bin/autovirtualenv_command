@@ -34,14 +34,6 @@ def autovirtualenv_command(place):
     default_file = here('.venv', 'default')
     default_env = here('.venv', 'env')
 
-    default_db = here('.venv', 'db', 'default')
-    if exists(default_db):
-        default_db_config_name = open(default_db, "r").read().replace("\n", "")
-        default_db_config = here('.venv', 'db', default_db_config_name)
-        mysql_config_file = set_var("MYSQL_CONFIG_FILE", default_db_config)
-    else:
-        mysql_config_file = unset_var("MYSQL_CONFIG_FILE")
-
     on_activate = here('.venv', 'on_activate')
     on_deactivate = here('.venv', 'on_deactivate')
     on_activate = "source %s" % on_activate if exists(on_activate) else None
@@ -52,19 +44,19 @@ def autovirtualenv_command(place):
         virtualenv_path = here('.venv', virtualenv_name)
 
         if isdir(virtualenv_path):
-            return concat_commands(mysql_config_file,
+            return concat_commands(
                 "source %s" % pjoin(virtualenv_path, 'bin', 'activate'), on_activate)
         else:
-            return concat_commands(mysql_config_file,
+            return concat_commands(
                 "workon %s" % virtualenv_name, on_activate)
 
     else:
 
         if isdir(default_env):
-            return concat_commands(mysql_config_file,
+            return concat_commands(
                 "source %s" % pjoin(default_env, 'bin', 'activate'), on_activate)
         else:
-            return concat_commands("deactivate", mysql_config_file, on_deactivate)
+            return concat_commands("deactivate", on_deactivate)
 
 
 def safe_deactivate(func):
