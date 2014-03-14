@@ -34,3 +34,7 @@ export LANG=en_US.UTF-8
 # Mac terminal ls colors
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
+
+
+# Docker
+export DOCKER_HOST=tcp://127.0.0.1:4243
