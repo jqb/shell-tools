@@ -1,0 +1,42 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import os
+import sys
+
+
+abspath = os.path.abspath
+pjoin = os.path.join
+dirname = os.path.dirname
+isdir = os.path.isdir
+exists = os.path.exists
+
+
+def calculatepath(place, *path):
+    absolute_here = abspath(place)  # always in the place where it was called
+    return abspath(pjoin(absolute_here, *path))
+
+
+def get_deployment_settings(root):
+    sys.path.insert(0, calculatepath(root))
+    from deployment import settings
+    return settings
+
+
+def ssh_to(name, root="."):
+    deployment = get_deployment_settings(root)
+    settings = deployment[name]
+    user = settings['user']
+    host = settings['hosts'][0]  # take first
+    return "ssh %s@%s" % (user, host)
+
+
+def print_command(ssh_command):
+    print >> sys.stderr, ssh_command
+    print ssh_command
+
+
+if __name__ == '__main__':
+    root = sys.argv[2] if len(sys.argv) >= 2 else "."
+    print_command(
+        ssh_to(sys.argv[1], root)
+    )
