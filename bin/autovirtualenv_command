@@ -12,7 +12,7 @@ exists = os.path.exists
 
 
 def calculatepath(place, *path):
-    absolute_here = abspath(place)  # always in the place where it was cold
+    absolute_here = abspath(place)  # always in the place where it was called
     return abspath(pjoin(absolute_here, *path))
 
 
@@ -28,15 +28,32 @@ def unset_var(name):
     return 'unset %s' % name
 
 
+def on_activate_command(on_activate, on_deactivate):
+    if on_activate:
+        return concat_commands(
+            set_var("VENV_ON_DEACTIVATE_SCRIPT", on_deactivate),
+            "source %s" % on_activate,
+        )
+
+
 def autovirtualenv_command(place):
     here = lambda *path: calculatepath(place, *path)
+
+    previous = os.environ.get('VENV_ON_DEACTIVATE_SCRIPT')
+    virtualenv_is_active = os.environ.get("VIRTUAL_ENV")
+    if previous:
+        previous = "source %s" % previous
+        if virtualenv_is_active:
+            previous = "%s && deactivate" % previous
+    else:
+        previous = None
 
     default_file = here('.venv', 'default')
     default_env = here('.venv', 'env')
 
     on_activate = here('.venv', 'on_activate')
     on_deactivate = here('.venv', 'on_deactivate')
-    on_activate = "source %s" % on_activate if exists(on_activate) else None
+    on_activate = on_activate_command(on_activate, on_deactivate)
     on_deactivate = "source %s" % on_deactivate if exists(on_deactivate) else None
 
     if exists(default_file):
@@ -45,16 +62,16 @@ def autovirtualenv_command(place):
 
         if isdir(virtualenv_path):
             return concat_commands(
-                "source %s" % pjoin(virtualenv_path, 'bin', 'activate'), on_activate)
+                previous, "source %s" % pjoin(virtualenv_path, 'bin', 'activate'), on_activate)
         else:
             return concat_commands(
-                "workon %s" % virtualenv_name, on_activate)
+                previous, "workon %s" % virtualenv_name, on_activate)
 
     else:
 
         if isdir(default_env):
             return concat_commands(
-                "source %s" % pjoin(default_env, 'bin', 'activate'), on_activate)
+                previous, "source %s" % pjoin(default_env, 'bin', 'activate'), on_activate)
         else:
             return concat_commands("deactivate", on_deactivate)
 
