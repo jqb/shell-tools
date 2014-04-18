@@ -1,0 +1,209 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import os
+import sys
+import imp
+import pipes
+import fnmatch
+import importlib
+from cStringIO import StringIO
+
+
+class BashStream(object):
+    def __init__(self):
+        self.out = StringIO()
+
+    def getvalue(self):
+        return self.out.getvalue()
+
+    def writeln(self, text):
+        self.out.write(text)
+        self.out.write("\n")
+
+
+abspath = os.path.abspath
+pjoin = os.path.join
+dirname = os.path.dirname
+isdir = os.path.isdir
+exists = os.path.exists
+expanduser = os.path.expanduser
+
+
+class Bash(object):
+    def echo(self, message):
+        return "; ".join([
+            'echo %s' % pipes.quote(msg)
+            for msg in message.split("\n")
+        ])
+
+    def export(self, name, value):
+        return 'export %s=%s' % (name, value)
+
+    def source(self, file_path):
+        return 'source %s' % file_path
+
+    def unset(self, name):
+        return 'unset %s' % name
+
+    def unset_f(self, name):
+        return 'unset -f %s' % name
+
+    def function(self, name, definition):
+        return "function %s () { %s; }" % (name, definition)
+
+
+class VEnvPlugin(object):
+    bash = Bash()
+
+    def on_activate(self, root_new, root_old):
+        return []
+
+    def on_deactivate(self, root_new, root_old):
+        return []
+
+
+# Very simple register
+class PLUGIN_REGISTER(list):
+    def add(self, *plugin_class):
+        self.extend(plugin_class)
+PLUGIN_REGISTER = PLUGIN_REGISTER()
+# end / register
+
+
+# DIRTY, DIRTY HACK....
+def onfly_autoenv_module():
+    autovenv = imp.new_module('autovenv')
+    autovenv.__dict__.update({
+        'Plugin': VEnvPlugin,
+        'register': PLUGIN_REGISTER,
+    })
+    return autovenv
+
+
+sys.modules['autovenv'] = onfly_autoenv_module()
+# end / DIRTY HACK
+
+
+# LOADING PLUGINS
+USER_PLUGINS = pjoin(expanduser("~"), '.venvplugins')
+sys.path.insert(0, USER_PLUGINS)
+
+
+def load_plugins():
+    def filter_python_files(file_name):
+        return fnmatch.fnmatch(file_name, "*.py")
+
+    def import_plugin_class(module_name):
+        # Importing should do all the staff
+        module = importlib.import_module(module_name)
+
+    plugin_files = os.listdir(USER_PLUGINS)
+    plugin_files = filter(filter_python_files, plugin_files)
+
+    for plugin_file in plugin_files:
+        import_plugin_class(plugin_file.rstrip(".py"))
+
+
+load_plugins()
+# end / LOADING PLUGINS
+
+
+def calculatepath(place, *path):
+    absolute_here = abspath(place)  # always in the place where it was called
+    return abspath(pjoin(absolute_here, *path))
+
+
+# TODO: add command that scans all the projects directories and checks
+# for last X days - "what I've been doing" report on git logs basis.
+
+
+class AvailablePlugins(VEnvPlugin):
+    def function_body(self):
+        plugin_format = (
+            "%s.%s\n"
+            "    %s"
+        )
+
+        return self.bash.echo("\n".join(
+            plugin_format % (pcls.__module__, pcls.__name__, pcls.__doc__)
+            for pcls in PLUGIN_REGISTER
+        ))
+
+    def on_activate(self, root_new, root_old):
+        return [
+            self.bash.function("autovenv-plugins", self.function_body()),
+        ]
+
+    def on_deactivate(self, root_new, root_old):
+        return [
+            self.bash.unset_f("autovenv-plugins"),
+        ]
+
+
+PLUGIN_REGISTER.add(AvailablePlugins)
+
+
+class VEnv(object):
+    VENV_TRIGGER = os.environ.get('VENV_TRIGGER', '.venv')
+
+    plugins = [
+        plagin_class() for plagin_class in PLUGIN_REGISTER
+    ]
+    bash = Bash()
+
+    def deactivate_bash_script(self, root_new, root_old):
+        result = []
+        for plugin in self.plugins:
+            scripts = plugin.on_deactivate(root_new, root_old)
+            result.extend(scripts or [])
+        return "\n".join(result)
+
+    def activate_bash_script(self, root_new, root_old):
+        result = []
+        for plugin in reversed(self.plugins):
+            scripts = plugin.on_activate(root_new, root_old)
+            result.extend(scripts or [])
+        return "\n".join(result)
+
+    def setup(self, place):
+        root_new = lambda *path: calculatepath(place, *path)
+        root_old = lambda *path: calculatepath(os.environ.get("OLDPWD"), *path)
+
+        venv_exists = exists(root_new(self.VENV_TRIGGER))
+        script_stream = BashStream()
+
+        auto_venv_is_active = os.environ.get("VENV_IS_ACTIVE")
+        if auto_venv_is_active:
+            script_stream.writeln(self.deactivate_bash_script(root_new, root_old))
+            script_stream.writeln(self.bash.unset("VENV_IS_ACTIVE"))
+            del os.environ["VENV_IS_ACTIVE"]
+
+        if venv_exists:
+            script_stream.writeln(self.activate_bash_script(root_new, root_old))
+            script_stream.writeln(self.bash.export("VENV_IS_ACTIVE", "True"))
+
+        return venv_exists, script_stream
+
+    # TODO: change it to iterative version
+    def lookup(self, place, parent_stream=None):
+        parent_stream = parent_stream or BashStream()
+
+        venv_exists, stream = self.setup(place)
+        parent_stream.writeln(stream.getvalue())
+
+        if place == "/":
+            return parent_stream.getvalue()
+
+        if not venv_exists:
+            return self.lookup(abspath(pjoin(place, "..")), parent_stream)
+
+        return parent_stream.getvalue()
+
+
+def main(place, venv=VEnv()):
+    place = abspath(place)
+    return venv.lookup(place)
+
+
+if __name__ == '__main__':
+    print (main(sys.argv[1] if sys.argv[1:] else "."))

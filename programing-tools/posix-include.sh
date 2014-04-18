@@ -50,7 +50,7 @@ set_git_sensitive_prompt
 
 # OWN TOOLS #########################################
 function cd () {
-    builtin cd $@ && eval "$(autovirtualenv_command)"
+    builtin cd $@ && eval "$(auto_venv_command)"
 }
 
 function db () {

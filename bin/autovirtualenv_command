@@ -20,20 +20,26 @@ def concat_commands(*cmds):
     return ' && '.join([c for c in cmds if c])
 
 
-def set_var(name, value):
+def export(name, value):
     return 'export %s=%s' % (name, value)
 
 
-def unset_var(name):
+def source(file_path):
+    return 'source %s' % file_path
+
+
+def unset(name):
     return 'unset %s' % name
 
 
-def on_activate_command(on_activate, on_deactivate):
+def on_activate_command(on_activate, variables=None):
     if on_activate:
-        return concat_commands(
-            set_var("VENV_ON_DEACTIVATE_SCRIPT", on_deactivate),
-            "source %s" % on_activate,
-        )
+        variables = variables or {}
+        args = [
+            export(name, value) for name, value in variables.items()
+        ]
+        args.append(source(on_activate))
+        return concat_commands(*args)
 
 
 def autovirtualenv_command(place):
@@ -42,19 +48,26 @@ def autovirtualenv_command(place):
     previous = os.environ.get('VENV_ON_DEACTIVATE_SCRIPT')
     virtualenv_is_active = os.environ.get("VIRTUAL_ENV")
     if previous:
-        previous = "source %s" % previous
+        previous = source(previous)
         if virtualenv_is_active:
             previous = "%s && deactivate" % previous
     else:
         previous = None
+
+    venv_root_parent = here()
+    venv_root = here('.venv')
 
     default_file = here('.venv', 'default')
     default_env = here('.venv', 'env')
 
     on_activate = here('.venv', 'on_activate')
     on_deactivate = here('.venv', 'on_deactivate')
-    on_activate = on_activate_command(on_activate, on_deactivate)
-    on_deactivate = "source %s" % on_deactivate if exists(on_deactivate) else None
+    on_activate = on_activate_command(on_activate, {
+        'VENV_ON_DEACTIVATE_SCRIPT': on_deactivate,
+        'VENV_ROOT': venv_root,
+        'VENV_ROOT_PARENT': venv_root_parent,
+    })
+    on_deactivate = source(on_deactivate) if exists(on_deactivate) else None
 
     if exists(default_file):
         virtualenv_name = open(default_file, "r").read().replace("\n", "")

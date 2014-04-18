@@ -16,13 +16,17 @@ def calculatepath(place, *path):
     return abspath(pjoin(absolute_here, *path))
 
 
-def get_deployment_settings(root):
-    sys.path.insert(0, calculatepath(root))
+def get_root(root=None):
+    return root or os.environ.get('VENV_ROOT_PARENT') or calculatepath(".")
+
+
+def get_deployment_settings(root=None):
+    sys.path.insert(0, get_root(root))
     from deployment import settings
     return settings
 
 
-def ssh_to(name, root="."):
+def bash_ssh_command(name, root=None):
     deployment = get_deployment_settings(root)
     settings = deployment[name]
     user = settings['user']
@@ -30,13 +34,16 @@ def ssh_to(name, root="."):
     return "ssh %s@%s" % (user, host)
 
 
-def print_command(ssh_command):
+def print_bash_command(ssh_command):
     print >> sys.stderr, ssh_command
     print ssh_command
 
 
-if __name__ == '__main__':
-    root = sys.argv[2] if len(sys.argv) >= 2 else "."
-    print_command(
-        ssh_to(sys.argv[1], root)
+def main():
+    print_bash_command(
+        bash_ssh_command(sys.argv[1])
     )
+
+
+if __name__ == '__main__':
+    main()
