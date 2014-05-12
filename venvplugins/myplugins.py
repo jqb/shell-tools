@@ -52,7 +52,12 @@ class SSHTOScriptsPlugin(autovenv.Plugin):
             sys.path.insert(0, root)
             from deployment import settings
             self._settings = settings
+            sys.path.pop(0)
         return self._settings
+
+    def server_names(self, root):
+        settings = self.get_deployment_settings(root)
+        return settings.keys()
 
     def ssh_command(self, name, root, user=None, host=None):
         deployment = self.get_deployment_settings(root)
@@ -74,24 +79,17 @@ class SSHTOScriptsPlugin(autovenv.Plugin):
         if exists(script):
             root = root_new()
             return [
-                self.bash.function("sshto-dev", self.function_body("dev", root)),
-                self.bash.function("sshto-bdev", self.function_body("bdev", root)),
-                self.bash.function("sshto-gdev", self.function_body("gdev", root)),
-
-                self.bash.function("sshto-live", self.function_body("live", root)),
-                self.bash.function("sshto-blive", self.function_body("blive", root)),
-                self.bash.function("sshto-glive", self.function_body("glive", root)),
-
-                self.bash.function("sshto-stage", self.function_body("stage", root)),
-                self.bash.function("sshto-as-jakub", self.function_body("dev", root, user="jakub")),
+                self.bash.function("sshto-%s" % name, self.function_body(name, root))
+                for name in self.server_names(root)
             ]
 
     def on_deactivate(self, root_new, root_old):
         script = root_old('deployment.py')
         if exists(script):
+            root = root_old()
             return [
-                self.bash.unset_f("sshto-dev"),
-                self.bash.unset_f("sshto-live"),
+                self.bash.unset_f("sshto-%s" % name)
+                for name in self.server_names(root)
             ]
 
 
