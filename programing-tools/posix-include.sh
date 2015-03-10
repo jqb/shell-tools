@@ -36,11 +36,16 @@ function set_git_sensitive_prompt() {
 }
 
 function git-log-graph () {
-    git log --graph --pretty="format:%C(yellow)%h%Cblue%d%Creset %s %C(white) %an, %ar(%ai)%Creset" $@
+    # git log --graph --pretty="format:%C(yellow)%h%Cblue%d%Creset %s %C(white) %an, %ar(%ai)%Creset" $@
+    git log --graph --pretty="format:%C(yellow)%h  %an, %ar(%ai)%Creset %Cblue%d%Creset %s %C(white)" $@
 }
 
 function git-log-graph-no-color () {
     git log --graph --pretty="format:%h%d %s %an, %ar" $@
+}
+
+function git-log-my () {
+    git log --pretty="format:%h | %ai | %d %s" --author="jqb" $@
 }
 
 set_git_sensitive_prompt
@@ -49,10 +54,6 @@ set_git_sensitive_prompt
 
 
 # OWN TOOLS #########################################
-function cd () {
-    builtin cd $@ && eval "$(auto_venv_command)"
-}
-
 function db () {
     if [ -n "$MYSQL_CONFIG_FILE" ]; then
         echo -e "\n"
@@ -86,3 +87,15 @@ eval "`boil --bash-completion`"
 # bash completion for pip
 eval "`pip completion --bash`"
 # END OF COMPLECTIONS
+
+
+# GNU GETTEXT
+# msggrep $(find frontend/templates/report_manager -name "*.html" | awk '{ print "-N "$1 }' | tr '\n' ' ') locale/de/LC_MESSAGES/django.po
+# END
+
+
+if hash penv 2>/dev/null; then
+    eval "`penv --startup-script`";
+else
+    echo "'penv' is not installed";
+fi

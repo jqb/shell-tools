@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
 import os
-import sys
 from os.path import (
     join as pjoin,
     isdir,
     exists,
 )
-import autovenv  # from "onfly" module
+import penv
 import mixins
 
 
-class VirtualenvPlugin(autovenv.Plugin):
+class VirtualenvPlugin(penv.Plugin):
     def on_activate(self, root_new, root_old):
-        venv = self.VENV_TRIGGER
+        venv = self.config.TRIGGER
         default_file = root_new(venv, 'default')
         default_env = root_new(venv, 'env')
 
@@ -33,19 +32,19 @@ class VirtualenvPlugin(autovenv.Plugin):
             return ["deactivate"]
 
 
-class CustomScriptsPlugin(autovenv.Plugin):
+class CustomScriptsPlugin(penv.Plugin):
     def on_activate(self, root_new, root_old):
-        script = root_new(self.VENV_TRIGGER, 'on_activate')
+        script = root_new(self.config.TRIGGER, 'on_activate')
         if exists(script):
             return [self.bash.source(script)]
 
     def on_deactivate(self, root_new, root_old):
-        script = root_old(self.VENV_TRIGGER, 'on_deactivate')
+        script = root_old(self.config.TRIGGER, 'on_deactivate')
         if exists(script):
             return [self.bash.source(script)]
 
 
-class SSHTOScriptsPlugin(autovenv.Plugin, mixins.DeploymentScriptMixin):
+class SSHTOScriptsPlugin(penv.Plugin, mixins.DeploymentScriptMixin):
     def get_deployment_settings(self, root):
         return self.get_deployment_py(root).settings
 

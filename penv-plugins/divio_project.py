@@ -1,17 +1,11 @@
 # -*- coding: utf-8 -*-
-from os.path import (
-    abspath,
-    join as pjoin,
-    dirname,
-    isdir,
-    exists,
-)
+from os.path import dirname
 
-import autovenv  # from "onfly" module
+import penv
 import mixins
 
 
-class DjangoDivioProjectPlugin(autovenv.Plugin,
+class DjangoDivioProjectPlugin(penv.Plugin,
                                mixins.FabfileMixin,
                                mixins.ManageScriptMixin):
 
@@ -36,7 +30,7 @@ class DjangoDivioProjectPlugin(autovenv.Plugin,
             'builtin cd %s && fab "$@"' % dirname(location),
             'builtin cd $CURRENT_DIR',
         ]
-        return ' ; '.join(script)
+        return ' && '.join(script)
 
     def python_script_command(self, root_func, script_body):
         # Make sure to run from src directory
@@ -102,7 +96,7 @@ class DjangoDivioProjectPlugin(autovenv.Plugin,
             ]
 
 
-class LocalSettingFile(autovenv.Plugin, mixins.LocalSettingFileMixin):
+class LocalSettingFile(penv.Plugin, mixins.LocalSettingFileMixin):
     def on_activate(self, root_new, root_old):
         result = self.get_local_settings_file(root_new)
         if result:
