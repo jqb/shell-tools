@@ -29,7 +29,8 @@ class VirtualenvPlugin(penv.Plugin):
 
     def on_deactivate(self, root_new, root_old):
         if os.environ.get("VIRTUAL_ENV"):
-            return ["deactivate"]
+            return ["deactivate 2>/dev/null"]
+            # return ["if hash deactivate 2>/dev/null; then deactivate; fi"]
 
 
 class CustomScriptsPlugin(penv.Plugin):

@@ -64,6 +64,9 @@ class DjangoSettingPlugin(mixins.ManageScriptMixin,
                     src_directory,
                     bash_function_body_p2)
             ]
+        return [
+            '# DjangoSettingPlugin :: no file "%s"' % script
+        ]
 
     def on_deactivate(self, root_new, root_old):
         return [self.bash.unset_f('django-setting')]

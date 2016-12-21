@@ -21,6 +21,51 @@ function clojure() {
 # END OF CLOJURE ###################################
 
 
+if hash penv 2>/dev/null; then
+    eval "`penv --startup-script`";
+else
+    echo "'penv' is not installed";
+fi
+
+
+function kill-find () {
+    ps aux | grep $1
+}
+
+function kill-all () {
+    ps aux | grep $1 | awk '{ print $2 }' | xargs kill -9
+}
+
+function git-log-graph () {
+    # git log --graph --pretty="format:%C(yellow)%h%Cblue%d%Creset %s %C(white) %an, %ar(%ai)%Creset" $@
+    git log --graph --pretty="format:%C(yellow)%h  %an, %ar(%ai)%Creset %Cblue%d%Creset %s %C(white)" $@
+}
+
+function git-log-graph-no-color () {
+    git log --graph --pretty="format:%h%d %s %an, %ar" $@
+}
+
+function git-log-my () {
+    author="$(echo $1 || echo Kuba Janoszek)"
+    shift 1
+    git log --pretty="format:%h | %ai | %d %s" --author="$author" $@
+}
+
+function git-compare-branches () {
+    git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative $1..$2
+}
+
+
+# OWN TOOLS #########################################
+function -current-directory-name () {
+    dirname $(realpath $1)
+}
+# END OF OWN TOOLS ##################################
+
+
+if [ "$ZSH_ON" = "true" ]; then
+    return
+fi
 
 # GIT TERMINAL BRANCH COLORING #####################
 function parse_git_branch () {
@@ -35,41 +80,8 @@ function set_git_sensitive_prompt() {
    PS1="$GREEN$NO_COLOUR\w$YELLOW\$(parse_git_branch)$NO_COLOUR\$ "
 }
 
-function git-log-graph () {
-    # git log --graph --pretty="format:%C(yellow)%h%Cblue%d%Creset %s %C(white) %an, %ar(%ai)%Creset" $@
-    git log --graph --pretty="format:%C(yellow)%h  %an, %ar(%ai)%Creset %Cblue%d%Creset %s %C(white)" $@
-}
-
-function git-log-graph-no-color () {
-    git log --graph --pretty="format:%h%d %s %an, %ar" $@
-}
-
-function git-log-my () {
-    git log --pretty="format:%h | %ai | %d %s" --author="jqb" $@
-}
-
 set_git_sensitive_prompt
 # END OF GIT ########################################
-
-
-
-# OWN TOOLS #########################################
-function db () {
-    if [ -n "$MYSQL_CONFIG_FILE" ]; then
-        echo -e "\n"
-        echo -e "    Running mysql client, config file: $MYSQL_CONFIG_FILE"
-        echo -e "\n"
-        mysql --defaults-file=$MYSQL_CONFIG_FILE $@
-    else
-        mysql $@
-    fi
-}
-
-function -current-directory-name () {
-    dirname $(realpath $1)
-}
-# END OF OWN TOOLS ##################################
-
 
 
 # ADDITIONAL IMPORTS
@@ -92,10 +104,3 @@ eval "`pip completion --bash`"
 # GNU GETTEXT
 # msggrep $(find frontend/templates/report_manager -name "*.html" | awk '{ print "-N "$1 }' | tr '\n' ' ') locale/de/LC_MESSAGES/django.po
 # END
-
-
-if hash penv 2>/dev/null; then
-    eval "`penv --startup-script`";
-else
-    echo "'penv' is not installed";
-fi

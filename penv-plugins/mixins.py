@@ -51,16 +51,26 @@ class ManageScriptMixin(SrcDirectoryMixin):
         # The only kind of project I know about are those which
         # has either "src" or "py_src" directory
         src_dir = self.get_src_directory(root_func)
-        if not src_dir:
-            return self.get_buildout_script(root_func)  # might be None
 
-        # I assume it's either:
-        locations = [
-            ('$PYTHON_EXECUTABLE', root_func(src_dir, '_manage_local_.py')), # my custom script for adri
-            ('', root_func('bin', 'django')),                                # buildout
-            ('$PYTHON_EXECUTABLE', root_func(src_dir, 'local')),             # like in mindsteps
-            ('$PYTHON_EXECUTABLE', root_func(src_dir, 'manage.py')),         # like in mindsteps as well
-        ]
+        # We don't have any "buildout" projects anymore:
+        # if not src_dir:
+        #     return self.get_buildout_script(root_func)  # might be None
+
+        if not src_dir:
+            locations = [
+                ('$PYTHON_EXECUTABLE', root_func('manage.py')),                  # in current directory
+            ]
+            # loc = locations[0][1]
+            # if not exists(loc):
+            #     return "#  KURWA! python %s" % (loc)
+        else:
+            # I assume it's either:
+            locations = [
+                ('$PYTHON_EXECUTABLE', root_func(src_dir, '_manage_local_.py')), # my custom script for adri
+                ('', root_func('bin', 'django')),                                # buildout
+                ('$PYTHON_EXECUTABLE', root_func(src_dir, 'local')),             # like in mindsteps
+                ('$PYTHON_EXECUTABLE', root_func(src_dir, 'manage.py')),         # like in mindsteps as well
+            ]
 
         for python, loc in locations:
             if exists(loc):
@@ -168,4 +178,7 @@ class ParseDotEnvMixin(object):
                 environ[key] = ast.literal_eval(val)
             except SyntaxError:
                 pass
+            except ValueError as e:
+                if 'melformed string' in str(e):
+                    environ[key] = val
         return environ

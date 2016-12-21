@@ -1,3 +1,7 @@
 export EDITOR="emacs -nw"
-export PS1="\u@\h \W$ "
 
+if [ "$ZSH_ON" = "true" ]; then
+    return
+fi
+
+export PS1="\u@\h \W$ "

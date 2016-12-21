@@ -1,0 +1,195 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import sys
+import string
+import datetime
+
+from collections import (
+    OrderedDict,
+    namedtuple,
+)
+
+import unicodecsv
+from dateutil.parser import parse
+
+
+SATURDAY = 5
+SUNDAY = 6
+WEEKEND_DAYS = [
+    SATURDAY,
+    SUNDAY,
+]
+
+
+GitLog = namedtuple('GitLog', 'hash, date, description')
+GitSessionStats = namedtuple('GitSessionStats', [
+    'starting_log',
+    'ending_log',
+    'delta',
+    'starting_hour',
+    'ending_hour',
+    'weekday',
+])
+
+
+def split_line(line):
+    line = line.strip(' \n')
+    line = line.split("|", 2)  # split only first two '|'
+    line = map(string.strip, line)
+    return line
+
+
+def convert_to_gitlog(line):
+    hash_, date, desc = line
+    return GitLog(
+        hash=hash_,
+        date=parse(date),
+        description=desc)
+
+
+def create_log_list(input_):
+    logs = []
+    for line in input_.xreadlines():
+        line = split_line(line)
+        log = convert_to_gitlog(line)
+        logs.append(log)
+    return logs
+
+
+def session_stats(date, logs):
+    glog_last = logs[0]
+    glog_first = logs[-1]
+
+    dates = [l.date for l in logs]
+    min_date = min(dates).strftime("%H:%M")
+    max_date = max(dates).strftime("%H:%M")
+
+    return GitSessionStats(
+        starting_log=glog_first,
+        ending_log=glog_last,
+        delta=(glog_last.date - glog_first.date),
+        starting_hour=min_date,
+        ending_hour=max_date,
+        weekday=date.strftime("%A"))
+
+
+def session_stats_format(stats):
+    return "%s | first commit at: %s | last commit at: %s | day of week: %s" % (
+        stats.delta, stats.starting_hour, stats.ending_hour, stats.weekday)
+
+
+def is_overtime_or_weekend(date):
+    return 18 < date.hour <= 23 or 0 <= date.hour <= 6 or date.weekday() in WEEKEND_DAYS
+
+
+def mapping_date(date):
+    if 0 <= date.hour <= 6:
+        date = date - datetime.timedelta(days=1)
+    return date.date()
+
+
+def split_commits_into_sessions(logs):
+    sessions = []
+    session = []
+
+    for n, n_1 in zip(logs, logs[1:]):
+        session.append(n)
+        delta = (n.date - n_1.date).total_seconds()
+        delta = abs(delta)
+        if delta > 2.5 * 60 * 60:
+            sessions.append(session)
+            session = []
+
+    if session and session not in sessions:
+        sessions.append(session)
+
+    return sessions
+
+
+def filter_overtime(logs):
+    for l in logs:
+        if is_overtime_or_weekend(l.date):
+            yield l
+
+
+def group_logs_by_date(logs):
+    data = OrderedDict()
+
+    for log in logs:
+        date = mapping_date(log.date)
+        if date not in data:
+            data[date] = []
+        data[date].append(log)
+
+    return data
+
+
+def format_log(log):
+    return "%s | %s | %s" % (
+        log.date.strftime("%Y-%m-%d"), log.date.strftime("%H:%M"), log.description
+    )
+
+
+def main(input_):
+    logs = create_log_list(input_)
+    overtime_logs = filter_overtime(logs)
+    data = group_logs_by_date(overtime_logs)
+
+    print "Overtime report"
+    print ""
+
+    export_data = []
+
+    sum_ = datetime.timedelta(days=0)
+
+    for grouping_data, logs_ in data.items():
+        sessions = split_commits_into_sessions(logs_)
+
+        if sessions:
+            print grouping_data
+            export_data.append([
+                grouping_data.strftime("%Y-%m-%d"),
+                '', '', '', '', ''])
+
+        for session in sessions:
+            stats = session_stats(grouping_data, session)
+            sum_ += stats.delta
+
+            print "     (%s)" % session_stats_format(stats)
+            export_data.append([
+                '',
+                'session time (min):',
+                '%s' % (stats.delta.total_seconds() / 60),
+                'first commit at: %s' % stats.starting_hour,
+                'last commit at: %s' % stats.ending_hour,
+                'day of week: %s' % stats.weekday,
+            ])
+
+            for log_ in session:
+                prefix = "    "
+                print prefix, format_log(log_)
+                export_data.append([
+                    '',
+                    '',
+                    '',
+                    '%s' % log_.date.strftime("%Y-%m-%d"),
+                    '%s' % log_.date.strftime("%H:%M"),
+                    '%s' % log_.description,
+                ])
+            print ""
+
+    print "=" * 40
+    print "   Sum: %s" % (sum_.total_seconds() / 60 / 60)
+    return export_data
+
+
+def export_csv(export_data, filname="overtime_report.csv"):
+    with open(filname, 'w') as fd:
+        writer = unicodecsv.writer(fd)
+        for row in export_data:
+            writer.writerow(row)
+
+
+if __name__ == '__main__':
+    export_data = main(sys.stdin)
+    # export_csv(export_data)

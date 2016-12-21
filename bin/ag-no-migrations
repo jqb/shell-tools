@@ -1,0 +1,5 @@
+#!/bin/bash
+echo "======================================================================"
+echo "USING 'ag' with '--ignore-dir migrations' & '--ignore-dir locale' !!!"
+echo "======================================================================"
+exec /usr/local/bin/ag --ignore-dir migrations --ignore-dir locale  "$@"

@@ -1,0 +1,29 @@
+#!/usr/bin/env python
+import hashlib
+import getpass
+import datetime
+
+
+def calculate_access_token(password, now=None, datetime_format='%Y-%m-%d %H'):
+    salt = hashlib.sha224(password).hexdigest()
+    time_dependent_data = (now or datetime.datetime.now())
+    access_token = '%s:%s' % (salt, time_dependent_data.strftime(datetime_format))
+    access_token_hash = hashlib.sha224(access_token).hexdigest()
+    valid_until = (time_dependent_data
+                   + datetime.timedelta(hours=1)
+                   - datetime.timedelta(minutes=time_dependent_data.minute)
+                   - datetime.timedelta(seconds=time_dependent_data.second))
+    return access_token_hash, valid_until
+
+
+def main():
+    password = getpass.getpass('Password: ')
+    now = datetime.datetime.now()
+    access_token_hash, valid_until = calculate_access_token(password, now=now)
+    print 'Token: %s' % access_token_hash
+    print 'Valid until: %s (for next: %s)' % (valid_until.strftime('%Y-%m-%d %H:%M'),
+                                              valid_until - now)
+
+
+if __name__ == '__main__':
+    main()

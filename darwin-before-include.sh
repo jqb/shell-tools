@@ -1,6 +1,6 @@
 ##### Homebrew Formula: python
 export PATH=/Users/divio/tools/bin:$PATH
-export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH
+# export PATH=$PATH:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin
 export ARCHFLAGS="-arch x86_64"
 
 
@@ -8,8 +8,10 @@ export ARCHFLAGS="-arch x86_64"
 # Quite silly: can print "pip completion --bash" because of that
 # export PIP_REQUIRE_VIRTUALENV=true
 export PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
-export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python
-source /usr/local/bin/virtualenvwrapper.sh
+# export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python2.7-32
+# export VIRTUALENVWRAPPER_VIRTUALENV=$HOME/.virtualenvs-2.7.12
+# source $HOME/.virtualenvs-2.7.12/bin/virtualenvwrapper.sh
+# source /usr/local/bin/virtualenvwrapper.sh
 
 
 # Mac iTerm2 hints:
@@ -37,4 +39,4 @@ export LSCOLORS=ExFxCxDxBxegedabagacad
 
 
 # Docker
-export DOCKER_HOST=tcp://127.0.0.1:4243
+# export DOCKER_HOST=tcp://127.0.0.1:4243

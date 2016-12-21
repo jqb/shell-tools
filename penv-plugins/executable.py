@@ -43,5 +43,5 @@ class PythonExecutablePlugin(penv.Plugin):
     def on_deactivate(self, root_new, root_old):
         return [
             self.bash.unset_f('python-executable'),
-            self.bash.unset_f('PYTHON_EXECUTABLE'),
+            self.bash.unset('PYTHON_EXECUTABLE'),
         ]

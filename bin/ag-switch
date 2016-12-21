@@ -1,0 +1,12 @@
+#!/bin/bash
+
+
+if [ "$(readlink $TOOLS/bin/ag)" = "$(echo $TOOLS/bin/ag-no-migrations)" ]; then
+    rm -rf $TOOLS/bin/ag
+    ln -s /usr/local/bin/ag $TOOLS/bin/ag
+else
+    rm -rf $TOOLS/bin/ag
+    ln -s $TOOLS/bin/ag-no-migrations $TOOLS/bin/ag
+fi
+
+ag-where

@@ -25,7 +25,11 @@ function recreate-db() {
     echo "Recreating db..."
     echo "DROP DATABASE IF EXISTS $DB_NAME;" | mysql -u root
     echo "CREATE DATABASE $DB_NAME CHARSET $CHARSET;" | mysql -u root
-    cat $DUMP_FILE | mysql -u root $DB_NAME
+    if [ -z $DUMP_FILE ]; then
+        echo " - You haven't specified dump file, skipping loading."
+    else
+        cat $DUMP_FILE | mysql -u root $DB_NAME
+    fi
     echo "...done."
     mysql -u root -e "SHOW CREATE DATABASE $DB_NAME"
     echo "  ...gzipping $DUMP_FILE"
@@ -45,10 +49,14 @@ function recreate-db () {
     psql -U postgres -c "DROP DATABASE IF EXISTS $DB_NAME;"
     psql -U postgres -c "CREATE DATABASE $DB_NAME ENCODING '$CHARSET';"
 
-    cat $DUMP_FILE | psql -U postgres $DB_NAME
-    echo "...done."
-    echo "  ...gzipping $DUMP_FILE"
-    gzip $DUMP_FILE && echo "  ...done."
+    if [ -z $DUMP_FILE ]; then
+        echo " - You haven't specified dump file, skipping loading."
+    else
+        cat $DUMP_FILE | psql -U postgres $DB_NAME
+        echo "...done."
+        echo "  ...gzipping $DUMP_FILE"
+        gzip $DUMP_FILE && echo "  ...done."
+    fi
 }
 """
 
@@ -132,7 +140,7 @@ class DatabasePlugin(mixins.ParseDotEnvMixin,
         data.update(self.get_dotenv_data(root_new))
         data.update(self.get_environ_data())
 
-        if (True
+        if (False
             or 'DATABASE_TYPE' not in data
             or 'DATABASE_NAME' not in data):
             return [

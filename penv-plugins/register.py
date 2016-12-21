@@ -19,6 +19,7 @@ from divio_project import (
 from database_plugin import DatabasePlugin
 from django_settings import DjangoSettingPlugin
 from dotenv_bash import LoadDotEnv
+from docker_plugin import DockerPlugin
 
 
 penv.registry.add(
@@ -39,4 +40,5 @@ penv.registry.add(
 
     DatabasePlugin,
     DjangoSettingPlugin,
+    DockerPlugin,
 )
