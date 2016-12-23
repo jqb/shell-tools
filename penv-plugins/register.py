@@ -1,6 +1,23 @@
 # -*- coding: utf-8 -*-
 import penv
 
+
+# Change bash implementation
+from penv.bash import Bash as BaseBash
+
+
+class Bash(BaseBash):
+    def unset(self, name):
+        return 'unset %s >/dev/null 2>&1' % name
+
+    def unset_f(self, name):
+        return 'unset -f %s >/dev/null 2>&1' % name
+
+
+penv.Plugin.bash = Bash()
+# env / change bash implementation
+
+
 from myplugins import (
     VirtualenvPlugin,
     CustomScriptsPlugin,
