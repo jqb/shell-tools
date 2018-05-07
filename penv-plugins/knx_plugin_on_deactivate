@@ -1,0 +1,5 @@
+#!/bin/bash
+
+
+unset -f sshto-office-rasperry-PY
+unset -f copy-and-run-on-raspberrypi

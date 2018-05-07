@@ -37,12 +37,15 @@ from database_plugin import DatabasePlugin
 from django_settings import DjangoSettingPlugin
 from dotenv_bash import LoadDotEnv
 from docker_plugin import DockerPlugin
+from grenzvergleich_plugin import GrenzvergleichPlugin
+from monitor_files_plugin import MonitorFilesPlugin
+from knx_plugin import KNXPlugin
 
 
 penv.registry.add(
     # venv variable should go first
     EnvVariablesPlugin,
-    LoadDotEnv,
+    # LoadDotEnv,
 
     # then virtualenv before we'll actually calculate which python
     # should we use
@@ -58,4 +61,7 @@ penv.registry.add(
     DatabasePlugin,
     DjangoSettingPlugin,
     DockerPlugin,
+    GrenzvergleichPlugin,
+    MonitorFilesPlugin,
+    KNXPlugin,
 )

@@ -33,6 +33,19 @@ function docker-images-remove-untagged () {
 }
 
 
+function docker-images-filter () {
+    docker images | grep "$1"
+}
+
+function docker-images-filter-remove () {
+    if [ "$1" = "" ]; then
+        echo "[ERROR] Please provide image name TO REMOVE"
+        return;
+    fi
+    docker images | grep "$1" | awk '{ print $3 }' | xargs docker rmi -f
+    docker images | grep "$1"
+}
+
 function stop-containers () {
     # by default - filterout data containers
     docker-ps-filter-data-containers $1

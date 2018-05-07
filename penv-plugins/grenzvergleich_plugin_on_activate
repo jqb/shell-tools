@@ -1,0 +1,43 @@
+#!/bin/bash
+
+
+export DJANGO_SETTINGS_MODULE=web_frontend.settings_develop
+export DATABASE_URL=mysql://root:root@127.0.0.1:3311/grdb
+
+
+function ssh-prod () {
+    ssh kuba@grenzvergleich.ch
+}
+
+function ssh-dev () {
+    ssh development@grenzvergleich.ch
+}
+
+function mysql-create-dump () {
+    env MYSQL_DUMPS_DIR=$VENV_ROOT_PARENT/../data/dumps $VENV_ROOT/bin/mysql-create-dump "$@"
+}
+
+function mysql-load-dump () {
+    env MYSQL_DUMPS_DIR=$VENV_ROOT_PARENT/../data/dumps $VENV_ROOT/bin/mysql-load-dump "$@"
+}
+
+function mysql-recreate-db () {
+    env MYSQL_DUMPS_DIR=$VENV_ROOT_PARENT/../data/dumps $VENV_ROOT/bin/mysql-load-dump "$@"
+}
+
+function ssh-new () {
+    ssh root@84.200.14.125
+}
+
+
+function ssh-aws-micro-tester-1 () {
+    ssh -i ../../develop.pem ubuntu@ec2-52-59-225-124.eu-central-1.compute.amazonaws.com
+}
+
+
+function _nothing () {
+    # 3$h0wgM1Ph4DiS9J$$zJM9X&6RXMnQLjpKaozusjKu4UFpyTQR5MFT93*
+    # 4O259n9pdKrrSGiLbeojkPCqhAF
+    # mysql -u mainapp -P 5000 -h 127.0.0.1 -p mainapp
+    # ssh -f -L 5000:localhost:3306 mainapp@84.200.14.125
+}

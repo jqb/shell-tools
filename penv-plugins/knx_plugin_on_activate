@@ -1,0 +1,11 @@
+#!/bin/bash
+
+
+function sshto-office-rasperry-PY () {
+    ssh pi@10.0.1.103
+}
+
+function copy-and-run-on-raspberrypi () {
+    scp "$1" pi@10.0.1.103:/home/pi/knx_jqb_test/_test.py
+    ssh -t pi@10.0.1.103 'python3 /home/pi/knx_jqb_test/_test.py'
+}
