@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # ENVIRONMENT #################################################
 # export LIBS='/home/kuba/docs/library'
 
@@ -6,6 +8,9 @@
 # export JVM=$JAVA_HOME/bin
 # export JBOSS_HOME=~/docs/library/java/jboss-5.1.0.GA
 # export PATH=$JVM:$PATH
+export TOMCAT_HOME=~/.tomcat/apache-tomcat-8.5.24/
+export PATH=$TOMCAT_HOME/bin/:$PATH
+
 
 # grails & groovy
 # export GRAILS_HOME=~/.grails
@@ -55,8 +60,36 @@
 # export DOCKER_HOST=tcp://192.168.59.103:2376
 # export DOCKER_CERT_PATH=/Users/divio/.boot2docker/certs/boot2docker-vm
 # export DOCKER_TLS_VERIFY=1
+
+
+# VM SHARED directory
+export VM_SHARED=/media/sf_xubuntu-vm
 ###############################################################
 
+
+function make-syncable () {
+    export THIS_DIR_NAME=$(basename $PWD)
+
+    if [ ! -d "$PWD/.penv" ]; then
+        penv-ify
+    fi
+
+    cat > $PWD/.penv/on_activate <<EOF
+#!/bin/bash
+
+# NOTE: Slash in the end is very important
+export SYNC_SRC=/media/sf_xubuntu-vm/code_sync/$THIS_DIR_NAME/
+EOF
+
+    cat > $PWD/.penv/on_deactivate <<EOF
+#!/bin/bash
+
+unset SYNC_SRC
+EOF
+
+    cd $PWD
+    unset THIS_DIR_NAME
+}
 
 
 # ALIASES #####################################################
