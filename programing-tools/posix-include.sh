@@ -5,6 +5,32 @@ export PIP_VIRTUALENV_BASE=$WORKON_HOME
 # END OF VARIABLES ################################
 
 
+# PENV
+function find-penv () {
+    PENV_EXEC="$HOME/.local/bin/penv"
+    if [ -f "$PENV_EXEC" ]; then
+        echo "$PENV_EXEC"
+        return
+    fi
+
+    PENV_EXEC="$(which penv)"
+    if [ -f "$PENV_EXEC" ]; then
+        echo "$PENV_EXEC"
+        return
+    fi
+
+    echo "NOT_INSTALLED"
+}
+
+export PENV_EXEC="$(find-penv)"
+if [ "$PENV_EXEC" = "NOT_INSTALLED" ]; then
+    echo "'penv' is not installed"
+else
+    eval "`$PENV_EXEC --startup-script`"
+fi
+# END / PENV
+
+
 
 # SVN ###############################################
 function svn-add-all(){
@@ -19,13 +45,6 @@ function clojure() {
     java -cp $TOOLS/programing-tools/clojure-1.3.0.jar clojure.main $@
 }
 # END OF CLOJURE ###################################
-
-
-if hash penv 2>/dev/null; then
-    eval "`penv --startup-script`";
-else
-    echo "'penv' is not installed";
-fi
 
 
 function kill-find () {
