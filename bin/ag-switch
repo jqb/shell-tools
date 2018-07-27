@@ -1,12 +1,34 @@
 #!/bin/bash
 
 
-if [ "$(readlink $TOOLS/bin/ag)" = "$(echo $TOOLS/bin/ag-no-migrations)" ]; then
-    rm -rf $TOOLS/bin/ag
-    ln -s /usr/local/bin/ag $TOOLS/bin/ag
-else
-    rm -rf $TOOLS/bin/ag
-    ln -s $TOOLS/bin/ag-no-migrations $TOOLS/bin/ag
+AG="$(find /usr/local/bin/ -name ag)"
+if [ "$AG" = "" ]; then
+    AG="$(find /usr/bin/ -name ag)"
 fi
 
+
+if [ "$(readlink $TOOLS/bin/ag)" = "$(echo $TOOLS/bin/ag-no-migrations)" ]; then
+    rm -rf $TOOLS/bin/ag
+    ln -s $AG $TOOLS/bin/ag
+    ag-where
+    exit 0;
+fi
+
+if [ "$(readlink $TOOLS/bin/ag)" = "$AG" ]; then
+    rm -rf $TOOLS/bin/ag
+    ln -s $TOOLS/bin/ag-python-only $TOOLS/bin/ag
+    ag-where
+    exit 0;
+fi
+
+if [ "$(readlink $TOOLS/bin/ag)" = "$(echo $TOOLS/bin/ag-python-only)" ]; then
+    rm -rf $TOOLS/bin/ag
+    ln -s $TOOLS/bin/ag-no-migrations $TOOLS/bin/ag
+    ag-where
+    exit 0;
+fi
+
+
+rm -rf $TOOLS/bin/ag
+ln -s $AG $TOOLS/bin/ag
 ag-where

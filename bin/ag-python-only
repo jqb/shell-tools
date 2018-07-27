@@ -1,0 +1,11 @@
+#!/bin/bash
+echo "======================================================================"
+echo "USING 'ag' with:"
+echo "    '--python'"
+echo "======================================================================"
+
+AG="$(find /usr/bin/ -name ag)"
+if [ "$AG" = "" ]; then
+    AG="$(find /usr/local/bin/ -name ag)"
+fi
+exec $AG --python "$@"
