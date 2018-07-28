@@ -6,11 +6,6 @@ function install_my_tools_scripts() {
 	echo "source \$HOME/tools/root_include.sh" >> $HOME/.bashrc
 }
 
-function install_git_config() {
-    echo "Installing git config..." && \
-	cp gitconfig.in $HOME/.gitconfig
-}
-
 function install_my_command_line_tools() {
     echo "Installing command line tools..." && \
 	mkdir -p $HOME/bin && \
