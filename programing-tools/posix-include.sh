@@ -5,6 +5,13 @@ export PIP_VIRTUALENV_BASE=$WORKON_HOME
 # END OF VARIABLES ################################
 
 
+# PYENV
+export PATH="$HOME/.pyenv/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+# end / PYENV
+
+
 # PENV
 function find-penv () {
     PENV_EXEC="$HOME/.local/bin/penv"
