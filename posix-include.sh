@@ -3,6 +3,9 @@
 # ENVIRONMENT #################################################
 # export LIBS='/home/kuba/docs/library'
 
+# GWS
+export PATH=$HOME/.gws/src:$PATH
+
 # java
 # export JAVA_HOME=/usr/lib/jvm/java-6-sun
 # export JVM=$JAVA_HOME/bin
