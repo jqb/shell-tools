@@ -4,4 +4,4 @@ if [ "$ZSH_ON" = "true" ]; then
     return
 fi
 
-. $TOOLS/general-tools/shell-bookmarks.sh
+# . $TOOLS/general-tools/shell-bookmarks.sh
