@@ -14,13 +14,13 @@ function mk-month-dir(){
 }
 
 function pack-dir(){
-    path=$1
-    if [ -z $path ]; then
+    dpath=$1
+    if [ -z $dpath ]; then
 	echo "You have to specified directory name."
 	return
     fi
-    name=`basename "$path"`
-    tar -cf $name.tar $path/* && gzip $name.tar
+    name=`basename "$dpath"`
+    tar -cf $name.tar $dpath/* && gzip $name.tar
 }
 
 function unpack(){
