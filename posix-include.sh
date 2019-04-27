@@ -3,6 +3,11 @@
 # ENVIRONMENT #################################################
 # export LIBS='/home/kuba/docs/library'
 
+
+# Own ~/tools/bin
+export PATH=$HOME/tools/bin:$PATH
+
+
 # GWS
 export PATH=$HOME/.gws/src:$PATH
 
