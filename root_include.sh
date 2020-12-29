@@ -1,7 +1,7 @@
 # GENERAL ##############################
 export TOOLS=$HOME/tools
 export EMAIL=kuba.janoszek@gmail.com
-export SYSTEM_NAME=$(python -c "import os; print '%s' % os.name")
+export SYSTEM_NAME=$(python -c "import os; print('%s' % os.name)")
 export PLATFORM_NAME=$(uname | tr '[:upper:]' '[:lower:]')
 ########################################
 
