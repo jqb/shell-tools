@@ -38,6 +38,37 @@ fi
 # END / PENV
 
 
+# SECRETSTORE
+function find-secretstore () {
+    SECRETSTORE_EXEC="$HOME/.local/bin/secretstore"
+    if [ -f "$SECRETSTORE_EXEC" ]; then
+        echo "$SECRETSTORE_EXEC"
+        return
+    fi
+
+    SECRETSTORE_EXEC="$(which secretstore)"
+    if [ -f "$SECRETSTORE_EXEC" ]; then
+        echo "$SECRETSTORE_EXEC"
+        return
+    fi
+
+    echo "NOT_INSTALLED"
+}
+
+
+export SECRETSTORE_EXEC="$(find-secretstore)"
+if [ "$SECRETSTORE_EXEC" = "NOT_INSTALLED" ]; then
+    echo "'secretstore' is not installed"
+else
+    source <($SECRETSTORE_EXEC --startup-script bash)
+fi
+
+
+alias sp="secretstore project --show-values | less"
+alias switch="secretstore-switch"
+# END / SECRETSTORE
+
+
 
 # SVN ###############################################
 function svn-add-all(){
