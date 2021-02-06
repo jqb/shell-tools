@@ -1,0 +1,25 @@
+#!/bin/bash
+
+
+log () {
+    LOG=~/custom-git.log
+    echo "$@" >> $LOG
+    # tail -n 1000 $LOG > $LOG
+}
+
+
+ENVFILE=$PWD/.penv/.emacs.magit.env
+if [ -f $ENVFILE ]; then
+    source $ENVFILE
+fi
+
+
+# log "$PWD"
+# log "$@"
+# log "VAR: $GIT_AUTHOR_NAME"
+# log "VAR: $GIT_AUTHOR_EMAIL"
+# log "VAR: $GIT_COMMITTER_NAME"
+# log "VAR: $GIT_COMMITTER_EMAIL"
+
+
+/usr/bin/git "$@"
