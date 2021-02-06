@@ -2,6 +2,7 @@
 echo "======================================================================"
 echo "USING 'ag' with:"
 echo "    '--ignore-dir migrations'"
+echo "    '--ignore-dir south_migrations'"
 echo "    '--ignore-dir locale'"
 echo "    '--ignore static/'"
 echo "======================================================================"
@@ -10,4 +11,4 @@ AG="$(find /usr/bin/ -name ag)"
 if [ "$AG" = "" ]; then
     AG="$(find /usr/local/bin/ -name ag)"
 fi
-exec $AG --ignore-dir migrations --ignore-dir locale --ignore-dir static/  "$@"
+exec $AG --ignore-dir migrations --ignore-dir south_migrations --ignore-dir locale --ignore-dir static/  "$@"
